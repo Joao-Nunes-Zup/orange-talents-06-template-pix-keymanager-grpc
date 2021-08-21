@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "br.com.ot6";
+option java_outer_classname = "PixKeymanager";
+option objc_class_prefix = "HLW";
+
+package br.com.ot6;
+
+service PixKeymanagerService {
+  rpc send (PixKeymanagerRequest) returns (PixKeymanagerReply) {}
+}
+
+message PixKeymanagerRequest {
+  string name = 1;
+}
+
+message PixKeymanagerReply {
+  string message = 1;
+}
