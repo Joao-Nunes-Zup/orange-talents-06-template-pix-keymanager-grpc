@@ -8,13 +8,31 @@ option objc_class_prefix = "HLW";
 package br.com.ot6;
 
 service PixKeymanagerService {
-  rpc send (PixKeymanagerRequest) returns (PixKeymanagerReply) {}
+  rpc register(NewPixKeyRequest) returns (NewPixKeyResponse) {}
 }
 
-message PixKeymanagerRequest {
-  string name = 1;
+enum KeyType {
+  UNKNOWN_KEY_TYPE = 0;
+  CPF = 1;
+  CELULAR = 2;
+  EMAIL = 3;
+  ALEATORIA = 4;
 }
 
-message PixKeymanagerReply {
-  string message = 1;
+enum AccountType {
+  UNKNOWN_ACCOUNT_TYPE = 0;
+  CONTA_CORRENTE = 1;
+  CONTA_POUPANCA = 2;
+}
+
+message NewPixKeyRequest {
+  string id = 1;
+  KeyType keyType = 2;
+  string keyValue = 3;
+  AccountType accountType = 4;
+}
+
+message NewPixKeyResponse {
+  string clientId = 1;
+  string pixId = 2;
 }

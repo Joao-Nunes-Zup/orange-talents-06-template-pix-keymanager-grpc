@@ -35,6 +35,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("org.hibernate:hibernate-validator:5.2.4.Final")
+    implementation("io.micronaut.xml:micronaut-jackson-xml")
 
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.postgresql:postgresql")
@@ -42,7 +45,6 @@ dependencies {
 
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("com.h2database:h2")
-    testImplementation("io.micronaut:micronaut-http-client")
 }
 
 
@@ -79,7 +81,7 @@ sourceSets {
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:3.17.2" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.38.0" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.36.2" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
