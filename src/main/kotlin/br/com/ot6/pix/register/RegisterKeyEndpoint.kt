@@ -10,9 +10,8 @@ import jakarta.inject.Singleton
 
 @HandledErrors
 @Singleton
-class RegisterKeyEndpoint(
-    @Inject val service: NewPixKeyService
-): PixKeymanagerServiceGrpc.PixKeymanagerServiceImplBase() {
+class RegisterKeyEndpoint(@Inject val service: NewPixKeyService)
+    : PixKeymanagerServiceGrpc.PixKeymanagerServiceImplBase() {
 
     override fun register(
         request: NewPixKeyRequest,
@@ -24,7 +23,7 @@ class RegisterKeyEndpoint(
         val response = NewPixKeyResponse
                         .newBuilder()
                         .setClientId(pixKey.clientId.toString())
-                        .setPixId(pixKey.key)
+                        .setPixId(pixKey.id.toString())
                         .build()
 
         responseObserver.onNext(response)

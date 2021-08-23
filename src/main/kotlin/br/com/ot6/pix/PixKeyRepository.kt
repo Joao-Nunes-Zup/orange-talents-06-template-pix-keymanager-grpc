@@ -8,4 +8,5 @@ import java.util.*
 interface PixKeyRepository: CrudRepository<PixKey, UUID> {
 
     fun existsByKey(keyValue: String?): Boolean
+    fun findByIdAndClientId(pixUuid: UUID?, clientUuid: UUID?): Optional<PixKey>
 }

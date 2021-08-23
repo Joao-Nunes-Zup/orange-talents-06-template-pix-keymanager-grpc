@@ -9,6 +9,7 @@ package br.com.ot6;
 
 service PixKeymanagerService {
   rpc register(NewPixKeyRequest) returns (NewPixKeyResponse) {}
+  rpc delete(DeletePixKeyRequest) returns (DeletePixKeyResponse) {}
 }
 
 enum KeyType {
@@ -33,6 +34,16 @@ message NewPixKeyRequest {
 }
 
 message NewPixKeyResponse {
+  string clientId = 1;
+  string pixId = 2;
+}
+
+message DeletePixKeyRequest {
+  string clientId = 1;
+  string pixId = 2;
+}
+
+message DeletePixKeyResponse {
   string clientId = 1;
   string pixId = 2;
 }
