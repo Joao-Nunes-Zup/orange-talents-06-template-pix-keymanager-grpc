@@ -10,8 +10,8 @@ import jakarta.inject.Singleton
 import javax.transaction.Transactional
 import javax.validation.Valid
 
-@Validated
 @Singleton
+@Validated
 class NewPixKeyService(
     @Inject val accountsClient: ItauAccountsClient,
     @Inject val repository: PixKeyRepository

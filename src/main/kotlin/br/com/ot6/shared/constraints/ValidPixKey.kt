@@ -4,6 +4,7 @@ import br.com.ot6.pix.register.NewPixKey
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext
+import jakarta.inject.Singleton
 import javax.validation.Constraint
 import javax.validation.Payload
 import kotlin.annotation.AnnotationTarget.*
@@ -14,11 +15,12 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Constraint(validatedBy = [ValidPixKeyValidator::class])
 annotation class ValidPixKey(
-    val message: String = "chave Pix inválida (\${validatedValue.keyType})",
+    val message: String = "chave Pix inválida",
     val groups: Array<KClass<Any>> = [],
     val payload: Array<KClass<Payload>> = []
 )
 
+@Singleton
 class ValidPixKeyValidator: ConstraintValidator<ValidPixKey, NewPixKey> {
 
     override fun isValid(
@@ -32,6 +34,4 @@ class ValidPixKeyValidator: ConstraintValidator<ValidPixKey, NewPixKey> {
 
         return value.keyType.validate(value.keyValue)
     }
-
-
 }

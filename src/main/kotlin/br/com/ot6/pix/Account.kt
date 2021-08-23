@@ -9,5 +9,4 @@ class Account(
     val ownerCpf: String,
     val agency: String,
     val number: String,
-    val accountNumber: String,
 )

@@ -45,6 +45,7 @@ dependencies {
 
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("com.h2database:h2")
+    testImplementation('org.mockito:mockito-core')
 }
 
 

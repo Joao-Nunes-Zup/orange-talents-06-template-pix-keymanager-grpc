@@ -1,17 +1,18 @@
 package br.com.ot6.pix
 
-import io.micronaut.validation.validator.constraints.EmailValidator
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
+
 
 enum class PixKeyType {
     CPF {
         override fun validate(key: String?): Boolean {
             if (key.isNullOrBlank()) return false
-            if(!key.matches("^[0-9]{11}\$".toRegex())) return false
+            if (key.count() > 11) return false
 
             return CPFValidator().run {
-                this.initialize(null)
-                this.isValid(key, null)
+                initialize(null)
+                isValid(key, null)
             }
         }
     },
@@ -26,8 +27,8 @@ enum class PixKeyType {
             if (key.isNullOrBlank()) return false
 
             return EmailValidator().run {
-                this.initialize(null)
-                this.isValid(key, null)
+                initialize(null)
+                isValid(key, null)
             }
         }
     },

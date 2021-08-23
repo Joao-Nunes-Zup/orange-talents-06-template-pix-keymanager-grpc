@@ -8,7 +8,7 @@ import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 
-@Client("http://localhost:9091")
+@Client("\${clients.itau.url}")
 interface ItauAccountsClient {
 
     @Get(

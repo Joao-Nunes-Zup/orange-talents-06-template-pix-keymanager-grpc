@@ -15,7 +15,6 @@ data class AccountInfoReturn(
             ownerCpf = this.titular.cpf,
             agency = this.agencia,
             number = this.numero,
-            accountNumber = this.numero
         )
     }
 }

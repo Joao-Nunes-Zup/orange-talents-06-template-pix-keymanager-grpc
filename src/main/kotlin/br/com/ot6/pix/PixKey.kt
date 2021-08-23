@@ -1,7 +1,6 @@
 package br.com.ot6.pix
 
 import br.com.ot6.AccountType
-import br.com.ot6.KeyType
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*

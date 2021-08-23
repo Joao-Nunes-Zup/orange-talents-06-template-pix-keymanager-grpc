@@ -10,13 +10,14 @@ import io.micronaut.core.annotation.Introspected
 import java.util.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
-@ValidPixKey
 @Introspected
+@ValidPixKey
 class NewPixKey(
-    @field:NotBlank @ValidUUID val clientId: String?,
+    @field:NotBlank @field:ValidUUID val clientId: String?,
     @field:NotNull val keyType: PixKeyType?,
-    @field:NotBlank val keyValue: String?,
+    @field:Size(max = 77) val keyValue: String?,
     @field:NotNull val accountType: AccountType?
 ) {
 

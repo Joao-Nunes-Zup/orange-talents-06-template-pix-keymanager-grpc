@@ -10,7 +10,7 @@ import jakarta.inject.Singleton
 
 @HandledErrors
 @Singleton
-class ResgisterKeyEndpoint(
+class RegisterKeyEndpoint(
     @Inject val service: NewPixKeyService
 ): PixKeymanagerServiceGrpc.PixKeymanagerServiceImplBase() {
 
