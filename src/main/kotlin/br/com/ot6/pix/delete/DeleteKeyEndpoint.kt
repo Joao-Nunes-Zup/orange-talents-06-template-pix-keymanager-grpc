@@ -1,8 +1,8 @@
 package br.com.ot6.pix.delete
 
-import br.com.ot6.*
-import br.com.ot6.pix.register.NewPixKeyService
-import br.com.ot6.pix.register.toDto
+import br.com.ot6.DeletePixKeyRequest
+import br.com.ot6.DeletePixKeyResponse
+import br.com.ot6.PixKeymanagerDeleteServiceGrpc
 import br.com.ot6.shared.grpc.HandledErrors
 import io.grpc.stub.StreamObserver
 import jakarta.inject.Inject
@@ -11,7 +11,7 @@ import jakarta.inject.Singleton
 @HandledErrors
 @Singleton
 class DeleteKeyEndpoint(@Inject private val service: DeleteKeyService)
-    : PixKeymanagerServiceGrpc.PixKeymanagerServiceImplBase() {
+    : PixKeymanagerDeleteServiceGrpc.PixKeymanagerDeleteServiceImplBase() {
 
     override fun delete(
         request: DeletePixKeyRequest,

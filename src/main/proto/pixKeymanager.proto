@@ -7,8 +7,11 @@ option objc_class_prefix = "HLW";
 
 package br.com.ot6;
 
-service PixKeymanagerService {
+service PixKeymanagerRegisterService {
   rpc register(NewPixKeyRequest) returns (NewPixKeyResponse) {}
+}
+
+service PixKeymanagerDeleteService {
   rpc delete(DeletePixKeyRequest) returns (DeletePixKeyResponse) {}
 }
 

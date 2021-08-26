@@ -1,9 +1,6 @@
 package br.com.ot6.pix.register
 
-import br.com.ot6.AccountType
-import br.com.ot6.KeyType
-import br.com.ot6.NewPixKeyRequest
-import br.com.ot6.PixKeymanagerServiceGrpc
+import br.com.ot6.*
 import br.com.ot6.pix.*
 import br.com.ot6.shared.clients.ItauAccountsClient
 import io.grpc.ManagedChannel
@@ -28,7 +25,7 @@ import java.util.*
 @MicronautTest(transactional = false)
 internal class RegisterKeyEndpointTest(
     private val pixKeyRepository: PixKeyRepository,
-    private val grpcClient: PixKeymanagerServiceGrpc.PixKeymanagerServiceBlockingStub
+    private val grpcClient: PixKeymanagerRegisterServiceGrpc.PixKeymanagerRegisterServiceBlockingStub
 ) {
 
     @Inject
@@ -223,9 +220,9 @@ internal class RegisterKeyEndpointTest(
         @Bean
         fun blockingStub(
             @GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel
-        ): PixKeymanagerServiceGrpc.PixKeymanagerServiceBlockingStub?
+        ): PixKeymanagerRegisterServiceGrpc.PixKeymanagerRegisterServiceBlockingStub?
         {
-            return PixKeymanagerServiceGrpc.newBlockingStub(channel)
+            return PixKeymanagerRegisterServiceGrpc.newBlockingStub(channel)
         }
     }
 
