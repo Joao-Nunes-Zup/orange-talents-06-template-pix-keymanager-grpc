@@ -1,6 +1,7 @@
 package br.com.ot6.pix
 
 import br.com.ot6.AccountType
+import br.com.ot6.shared.clients.bcb.dtos.SavePixKeyRequest
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -15,7 +16,6 @@ import javax.validation.constraints.NotNull
     ]
 )
 class PixKey(
-
     @field:NotNull
     @Column(nullable = false)
     val clientId: UUID,
@@ -25,9 +25,9 @@ class PixKey(
     @Column(nullable = false)
     val type: PixKeyType,
 
-    @field:NotBlank
+    @field:NotNull
     @Column(nullable = false, unique = true)
-    val key: String,
+    var key: String,
 
     @field:NotNull
     @Enumerated(EnumType.STRING)
@@ -44,4 +44,8 @@ class PixKey(
 
     @Column(nullable = false)
     val creationDate: LocalDateTime = LocalDateTime.now()
+
+    fun updateKey(key: String) {
+        this.key = key
+    }
 }

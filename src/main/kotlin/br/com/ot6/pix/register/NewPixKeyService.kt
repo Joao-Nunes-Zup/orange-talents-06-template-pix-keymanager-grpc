@@ -1,9 +1,13 @@
 package br.com.ot6.pix.register
 
+import br.com.ot6.pix.Account
 import br.com.ot6.pix.PixKey
-import br.com.ot6.shared.clients.ItauAccountsClient
+import br.com.ot6.shared.clients.itau.ItauAccountsClient
 import br.com.ot6.pix.PixKeyRepository
+import br.com.ot6.shared.clients.bcb.BancoCentralClient
+import br.com.ot6.shared.clients.bcb.dtos.SavePixKeyRequest
 import br.com.ot6.shared.exceptions.ExistingPixKeyException
+import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
@@ -13,7 +17,8 @@ import javax.validation.Valid
 @Singleton
 @Validated
 class NewPixKeyService(
-    @Inject val accountsClient: ItauAccountsClient,
+    @Inject val itauClient: ItauAccountsClient,
+    @Inject val bcbClient: BancoCentralClient,
     @Inject val repository: PixKeyRepository
 ) {
 
@@ -24,16 +29,25 @@ class NewPixKeyService(
         }
 
         val accountInfoReturn =
-            accountsClient.findByClientIdAndAccountType(
+            itauClient.findByClientIdAndAccountType(
                 pixKeyDto.clientId!!,
                 pixKeyDto.accountType!!.name
-            )
+            ).body()
+                ?: throw IllegalStateException("Cliente Itaú não encontrado")
 
-        val account = accountInfoReturn.body()?.toModel()
-            ?: throw IllegalStateException("Cliente Itaú não encontrado")
-
+        val account = Account.from(accountInfoReturn)
         val pixKey: PixKey = pixKeyDto.toModel(account)
+
         repository.save(pixKey)
+
+        val bcbPixKeyRequest = SavePixKeyRequest.from(pixKey)
+        val bcbResponse = bcbClient.savePixKey(bcbPixKeyRequest)
+
+        if (!HttpStatus.CREATED.equals(bcbResponse.status)) {
+            throw IllegalStateException("Erro ao criar chave no Banco Centreal do Brasil")
+        }
+
+        pixKey.updateKey(bcbResponse.body()!!.key)
 
         return pixKey
     }

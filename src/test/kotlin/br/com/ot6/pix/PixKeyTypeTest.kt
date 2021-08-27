@@ -36,18 +36,18 @@ internal class PixKeyTypeTest {
     }
 
     @Nested
-    inner class CELULAR {
+    inner class PHONE {
 
         @Test
         fun `should be valid if phone number format is correct`() {
-            PixKeyType.CELULAR.run {
+            PixKeyType.PHONE.run {
                 assertTrue(this.validate("+5585988714077"))
             }
         }
 
         @Test
         fun `should not be valid if phone number format is incorrect`() {
-            PixKeyType.CELULAR.run {
+            PixKeyType.PHONE.run {
                 assertFalse(this.validate("14998271234"))
                 assertFalse(this.validate("+5a585988714077"))
             }
@@ -55,7 +55,7 @@ internal class PixKeyTypeTest {
 
         @Test
         fun `should not be valid if phone number is null or empty`() {
-            PixKeyType.CELULAR.run {
+            PixKeyType.PHONE.run {
                 assertFalse(this.validate(""))
                 assertFalse(this.validate(null))
             }
@@ -91,11 +91,11 @@ internal class PixKeyTypeTest {
     }
 
     @Nested
-    inner class ALEATORIA {
+    inner class RANDOM {
 
         @Test
         fun `should be valid if random key comes null or valid`() {
-            PixKeyType.ALEATORIA.run {
+            PixKeyType.RANDOM.run {
                 assertTrue(this.validate(null))
                 assertTrue(this.validate(""))
             }
@@ -103,7 +103,7 @@ internal class PixKeyTypeTest {
 
         @Test
         fun `should not be valid if random key has a value`() {
-            PixKeyType.ALEATORIA.run {
+            PixKeyType.RANDOM.run {
                 assertFalse(this.validate("value"))
             }
         }

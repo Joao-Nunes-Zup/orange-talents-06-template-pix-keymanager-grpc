@@ -1,8 +1,11 @@
 package br.com.ot6.pix.delete
 
 import br.com.ot6.pix.PixKeyRepository
+import br.com.ot6.shared.clients.bcb.BancoCentralClient
+import br.com.ot6.shared.clients.bcb.dtos.DeletePixKeyRequest
 import br.com.ot6.shared.constraints.ValidUUID
 import br.com.ot6.shared.exceptions.PixKeyNotFoundException
+import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
@@ -12,7 +15,10 @@ import javax.validation.constraints.NotBlank
 
 @Validated
 @Singleton
-class DeleteKeyService(@Inject private val repository: PixKeyRepository) {
+class DeleteKeyService(
+    @Inject private val repository: PixKeyRepository,
+    @Inject private val bcbClient: BancoCentralClient
+) {
 
     @Transactional
     fun remove(
@@ -27,6 +33,13 @@ class DeleteKeyService(@Inject private val repository: PixKeyRepository) {
                 PixKeyNotFoundException("Chave não encontrada ou não pertence ao cliente")
             }
 
-        repository.deleteById(pixUuid)
+        repository.deleteById(key.id!!)
+
+        val bcbDeletePixRequest = DeletePixKeyRequest(key.key)
+        val bcbResponse = bcbClient.deletePixKey(key.key, bcbDeletePixRequest)
+
+        if (!HttpStatus.OK.equals(bcbResponse.status)) {
+            throw IllegalStateException("Erro ao remover chave no Banco Central do Brasil")
+        }
     }
 }

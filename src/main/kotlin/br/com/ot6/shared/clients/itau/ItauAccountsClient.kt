@@ -1,4 +1,4 @@
-package br.com.ot6.shared.clients
+package br.com.ot6.shared.clients.itau
 
 import br.com.ot6.pix.AccountInfoReturn
 import io.micronaut.http.HttpResponse

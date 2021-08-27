@@ -35,7 +35,7 @@ internal class DeleteKeyEndpointTest(
 
         val pixKey = PixKey(
             clientId = UUID.randomUUID(),
-            type = PixKeyType.ALEATORIA,
+            type = PixKeyType.RANDOM,
             key = UUID.randomUUID().toString(),
             accountType = AccountType.CONTA_CORRENTE,
             account = Account(

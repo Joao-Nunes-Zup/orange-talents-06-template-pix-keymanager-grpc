@@ -9,7 +9,9 @@ fun NewPixKeyRequest.toDto(): NewPixKey {
     return NewPixKey(
         clientId = this.id,
         keyType = when (this.keyType) {
-            KeyType.UNKNOWN_KEY_TYPE -> null;
+            KeyType.UNKNOWN_KEY_TYPE -> null
+            KeyType.CELULAR -> PixKeyType.PHONE
+            KeyType.ALEATORIA -> PixKeyType.RANDOM
             else -> PixKeyType.valueOf(this.keyType.name)
         },
         keyValue = this.keyValue,

@@ -16,7 +16,7 @@ enum class PixKeyType {
             }
         }
     },
-    CELULAR {
+    PHONE {
         override fun validate(key: String?): Boolean {
             if (key.isNullOrBlank()) return false
             return key.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex())
@@ -32,7 +32,7 @@ enum class PixKeyType {
             }
         }
     },
-    ALEATORIA {
+    RANDOM {
         override fun validate(key: String?): Boolean = key.isNullOrBlank()
     };
 

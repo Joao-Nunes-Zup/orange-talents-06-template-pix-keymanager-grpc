@@ -23,7 +23,7 @@ class NewPixKey(
 
     fun toModel(account: Account): PixKey {
         val key = when (this.keyType) {
-            PixKeyType.ALEATORIA -> generateKey()
+            PixKeyType.RANDOM -> ""
             else -> this.keyValue!!
         }
 
@@ -34,9 +34,5 @@ class NewPixKey(
             accountType = this.accountType!!,
             account
         )
-    }
-
-    private fun generateKey(): String {
-        return UUID.randomUUID().toString()
     }
 }

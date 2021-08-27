@@ -2,7 +2,7 @@ package br.com.ot6.pix.register
 
 import br.com.ot6.*
 import br.com.ot6.pix.*
-import br.com.ot6.shared.clients.ItauAccountsClient
+import br.com.ot6.shared.clients.itau.ItauAccountsClient
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
