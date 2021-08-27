@@ -1,5 +1,5 @@
 package br.com.ot6.shared.clients.bcb.dtos
 
-enum class AccountTypeClientRequest {
+enum class ClientAccountType {
     CACC, SVGS
 }

@@ -16,9 +16,9 @@ data class SavePixKeyRequest(
         fun from(pixKey: PixKey): SavePixKeyRequest {
             val accountType =
                 if (AccountType.CONTA_CORRENTE.equals(pixKey.accountType)) {
-                    AccountTypeClientRequest.CACC
+                    ClientAccountType.CACC
                 } else {
-                    AccountTypeClientRequest.SVGS
+                    ClientAccountType.SVGS
                 }
 
             return SavePixKeyRequest(
@@ -60,19 +60,13 @@ data class SavePixKeyRequest(
         result = 31 * result + owner.hashCode()
         return result
     }
-
-    override fun toString(): String {
-        return "SavePixKeyRequest(keyType=$keyType, key='$key', bankAccount=$bankAccount, owner=$owner)"
-    }
-
-
 }
 
 data class BankAccountRequest(
     val participant: String,
     val branch: String,
     val accountNumber: String,
-    val accountType: AccountTypeClientRequest
+    val accountType: ClientAccountType
 )
 
 data class OwnerRequest(

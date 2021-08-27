@@ -5,6 +5,8 @@ option java_package = "br.com.ot6";
 option java_outer_classname = "PixKeymanager";
 option objc_class_prefix = "HLW";
 
+import "google/protobuf/timestamp.proto";
+
 package br.com.ot6;
 
 service PixKeymanagerRegisterService {
@@ -13,6 +15,10 @@ service PixKeymanagerRegisterService {
 
 service PixKeymanagerDeleteService {
   rpc delete(DeletePixKeyRequest) returns (DeletePixKeyResponse) {}
+}
+
+service PixKeymanagerDetailService {
+  rpc detail(DetailPixKeyRequest) returns (DetailPixKeyResponse) {}
 }
 
 enum KeyType {
@@ -49,4 +55,40 @@ message DeletePixKeyRequest {
 message DeletePixKeyResponse {
   string clientId = 1;
   string pixId = 2;
+}
+
+message DetailPixKeyRequest {
+  message FilterByPixId {
+    string clientId = 1;
+    string pixId = 2;
+  }
+
+  oneof filter {
+    FilterByPixId pixId = 1;
+    string key = 2;
+  }
+}
+
+message DetailPixKeyResponse {
+
+  message PixKey {
+
+    message AccountInfo {
+      AccountType type = 1;
+      string institution = 2;
+      string ownerName = 3;
+      string ownerCpf = 4;
+      string agency = 5;
+      string number = 6;
+    }
+
+    KeyType type = 1;
+    string key = 2;
+    AccountInfo account = 3;
+    google.protobuf.Timestamp creationDate = 4;
+  }
+
+  string clientId = 1;
+  string pixId = 2;
+  PixKey key = 3;
 }

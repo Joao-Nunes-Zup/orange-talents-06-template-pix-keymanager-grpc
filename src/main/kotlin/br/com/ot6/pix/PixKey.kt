@@ -53,5 +53,7 @@ class PixKey(
         return "PixKey(clientId=$clientId, type=$type, key='$key', accountType=$accountType, account=$account, id=$id, creationDate=$creationDate)"
     }
 
-
+    fun belongsToClient(possibleClientId: UUID?): Boolean {
+        return this.clientId.equals(possibleClientId)
+    }
 }

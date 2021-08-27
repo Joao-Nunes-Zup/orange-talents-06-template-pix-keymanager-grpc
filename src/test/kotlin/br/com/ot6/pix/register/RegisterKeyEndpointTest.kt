@@ -320,7 +320,7 @@ internal class RegisterKeyEndpointTest(
                 participant = Account.ITAU_UNIBANCO_ISPB,
                 branch = clientAccount.agency,
                 accountNumber = clientAccount.number,
-                accountType = AccountTypeClientRequest.CACC
+                accountType = ClientAccountType.CACC
             ),
             owner = OwnerRequest(
                 type = OwnerRequest.OwnerType.NATURAL_PERSON,
