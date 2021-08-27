@@ -11,8 +11,8 @@ class DetailPixKeyResponseConverter {
 
     fun convert(keyInfo: PixKeyInfo): DetailPixKeyResponse {
         return DetailPixKeyResponse.newBuilder()
-            .setClientId(keyInfo.clientId?.toString())
-            .setPixId(keyInfo.pixId?.toString())
+            .setClientId(keyInfo.clientId?.toString() ?: "")
+            .setPixId(keyInfo.pixId?.toString() ?: "")
             .setKey(
                 DetailPixKeyResponse.PixKey.newBuilder()
                     .setType(

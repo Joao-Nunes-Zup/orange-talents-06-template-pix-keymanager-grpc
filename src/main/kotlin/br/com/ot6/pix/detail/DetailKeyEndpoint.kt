@@ -15,7 +15,8 @@ import jakarta.inject.Singleton
 @Singleton
 class DetailKeyEndpoint(
     @Inject private val repository: PixKeyRepository,
-    @Inject private val validator: Validator,
+    @Inject val validator: Validator,
+    @Inject val service: DetailKeyService,
     @Inject private val bcbClient: BancoCentralClient
 ): PixKeymanagerDetailServiceGrpc.PixKeymanagerDetailServiceImplBase() {
 
@@ -23,7 +24,7 @@ class DetailKeyEndpoint(
         request: DetailPixKeyRequest,
         responseObserver: StreamObserver<DetailPixKeyResponse>
     ) {
-        val filter = request.toModel(validator)
+        val filter = request.toFilter(validator)
         val keyInfo = filter.filter(repository, bcbClient)
 
         responseObserver.onNext(DetailPixKeyResponseConverter().convert(keyInfo))

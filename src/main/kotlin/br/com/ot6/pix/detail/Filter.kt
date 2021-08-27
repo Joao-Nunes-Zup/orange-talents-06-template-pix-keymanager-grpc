@@ -11,8 +11,6 @@ import java.util.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
-@Suppress("CanSealedSubClassBeObject")
-@Introspected
 sealed class Filter {
 
     abstract fun filter(
@@ -26,8 +24,8 @@ sealed class Filter {
         @field:NotBlank @field:ValidUUID val pixId: String
     ): Filter() {
 
-        fun clientIdAsUuid() = UUID.fromString(clientId)
-        fun pixIdAsUuid() = UUID.fromString(pixId)
+        private fun clientIdAsUuid(): UUID = UUID.fromString(clientId)
+        private fun pixIdAsUuid(): UUID = UUID.fromString(pixId)
 
         override fun filter(
             repository: PixKeyRepository,
