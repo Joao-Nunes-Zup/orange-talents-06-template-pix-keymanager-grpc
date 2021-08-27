@@ -2,6 +2,8 @@ package br.com.ot6.pix.register
 
 import br.com.ot6.*
 import br.com.ot6.pix.*
+import br.com.ot6.shared.clients.bcb.BancoCentralClient
+import br.com.ot6.shared.clients.bcb.dtos.*
 import br.com.ot6.shared.clients.itau.ItauAccountsClient
 import io.grpc.ManagedChannel
 import io.grpc.Status
@@ -29,7 +31,10 @@ internal class RegisterKeyEndpointTest(
 ) {
 
     @Inject
-    lateinit var accountsClient: ItauAccountsClient
+    lateinit var itauClient: ItauAccountsClient
+
+    @Inject
+    lateinit var bcbClient: BancoCentralClient
 
     private val clientId: UUID = UUID.randomUUID()
     private val clientAccountType: AccountType = AccountType.CONTA_CORRENTE
@@ -49,11 +54,20 @@ internal class RegisterKeyEndpointTest(
     @Test
     fun `should register a new pix key`() {
         `when`(
-            accountsClient.findByClientIdAndAccountType(
+            itauClient.findByClientIdAndAccountType(
                 clientId = clientId.toString(),
                 tipo = clientAccountType.name
             )
         ).thenReturn(HttpResponse.ok(accountInfoReturn()))
+
+        `when`(
+            bcbClient.savePixKey(
+                saveKeyRequest(
+                    keyType = PixKeyType.CPF,
+                    key = "35504715059"
+                )
+            )
+        ).thenReturn(HttpResponse.created(saveKeyReturn()))
 
         val response = grpcClient.register(
             NewPixKeyRequest
@@ -164,11 +178,20 @@ internal class RegisterKeyEndpointTest(
     @Test
     fun `random key format should be valid`() {
         `when`(
-            accountsClient.findByClientIdAndAccountType(
+            itauClient.findByClientIdAndAccountType(
                 clientId = clientId.toString(),
                 tipo = clientAccountType.name
             )
         ).thenReturn(HttpResponse.ok(accountInfoReturn()))
+
+        `when`(
+            bcbClient.savePixKey(
+                saveKeyRequest(
+                    keyType = PixKeyType.RANDOM,
+                    key = ""
+                )
+            )
+        ).thenReturn(HttpResponse.created(saveKeyReturn()))
 
         val response = grpcClient.register(
             NewPixKeyRequest
@@ -191,7 +214,7 @@ internal class RegisterKeyEndpointTest(
     @Test
     fun `should not register pix key when client account info isn't found`() {
         `when`(
-            accountsClient.findByClientIdAndAccountType(
+            itauClient.findByClientIdAndAccountType(
                 clientId = clientId.toString(),
                 tipo = clientAccountType.name
             )
@@ -214,6 +237,42 @@ internal class RegisterKeyEndpointTest(
         }
     }
 
+    @Test
+    fun `should not register pix key when bcb client fails to register pix key`() {
+        `when`(
+            itauClient.findByClientIdAndAccountType(
+                clientId = clientId.toString(),
+                tipo = clientAccountType.name
+            )
+        ).thenReturn(HttpResponse.ok(accountInfoReturn()))
+
+        `when`(
+            bcbClient.savePixKey(
+                saveKeyRequest(
+                    keyType = PixKeyType.CPF,
+                    key = "35504715059"
+                )
+            )
+        ).thenReturn(HttpResponse.notFound())
+
+        val exception = assertThrows<StatusRuntimeException> {
+            grpcClient.register(
+                NewPixKeyRequest
+                    .newBuilder()
+                    .setId(clientId.toString())
+                    .setKeyType(KeyType.CPF)
+                    .setKeyValue("35504715059")
+                    .setAccountType(clientAccountType)
+                    .build()
+            )
+        }
+
+        exception.run {
+            assertEquals(Status.FAILED_PRECONDITION.code, exception.status.code)
+            assertEquals("Erro ao criar chave no Banco Central do Brasil", exception.status.description)
+        }
+    }
+
     @Factory
     class Clients {
 
@@ -227,7 +286,7 @@ internal class RegisterKeyEndpointTest(
     }
 
     @MockBean(ItauAccountsClient::class)
-    fun accountsClient(): ItauAccountsClient {
+    fun itauClient(): ItauAccountsClient {
         return Mockito.mock(ItauAccountsClient::class.java)
     }
 
@@ -235,15 +294,56 @@ internal class RegisterKeyEndpointTest(
         return AccountInfoReturn(
             tipo = clientAccountType.name,
             instituicao = InstituicaoReturn(
-                nome = "ITAU UNIBANCO",
-                ispb = "67829165"
+                nome = "ITAÚ UNIBANCO S.A.",
+                ispb = Account.ITAU_UNIBANCO_ISPB
             ),
-            agencia = "0000",
-            numero = "11111",
+            agencia = clientAccount.agency,
+            numero = clientAccount.number,
             titular = TitularReturn(
                 id = clientId.toString(),
-                nome = "Fulano de Tal",
-                cpf = "87416253509"
+                nome = clientAccount.ownerName,
+                cpf = clientAccount.ownerCpf
+            )
+        )
+    }
+
+    @MockBean(BancoCentralClient::class)
+    fun bcbClient(): BancoCentralClient {
+        return Mockito.mock(BancoCentralClient::class.java)
+    }
+
+    private fun saveKeyRequest(keyType: PixKeyType, key: String): SavePixKeyRequest {
+        return SavePixKeyRequest(
+            keyType,
+            key,
+            bankAccount = BankAccountRequest(
+                participant = Account.ITAU_UNIBANCO_ISPB,
+                branch = clientAccount.agency,
+                accountNumber = clientAccount.number,
+                accountType = AccountTypeClientRequest.CACC
+            ),
+            owner = OwnerRequest(
+                type = OwnerRequest.OwnerType.NATURAL_PERSON,
+                name = clientAccount.ownerName,
+                taxIdNumber = clientAccount.ownerCpf
+            )
+        )
+    }
+
+    private fun saveKeyReturn(): SavePixKeyReturn {
+        return SavePixKeyReturn(
+            keyType = PixKeyType.RANDOM.toString(),
+            key = UUID.randomUUID().toString(),
+            bankAccount = BankAccountReturn(
+                participant = Account.ITAU_UNIBANCO_ISPB,
+                branch = "1111",
+                accountNumber = "000000",
+                accountType = "CACC"
+            ),
+            owner = OwnerReturn(
+                type = OwnerRequest.OwnerType.NATURAL_PERSON.toString(),
+                name = clientAccount.ownerName,
+                taxIdNumber = clientAccount.ownerCpf
             )
         )
     }

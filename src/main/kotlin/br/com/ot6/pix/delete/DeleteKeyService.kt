@@ -2,7 +2,7 @@ package br.com.ot6.pix.delete
 
 import br.com.ot6.pix.PixKeyRepository
 import br.com.ot6.shared.clients.bcb.BancoCentralClient
-import br.com.ot6.shared.clients.bcb.dtos.DeletePixKeyRequest
+import br.com.ot6.shared.clients.bcb.dtos.DeletePixKeyClientRequest
 import br.com.ot6.shared.constraints.ValidUUID
 import br.com.ot6.shared.exceptions.PixKeyNotFoundException
 import io.micronaut.http.HttpStatus
@@ -35,7 +35,7 @@ class DeleteKeyService(
 
         repository.deleteById(key.id!!)
 
-        val bcbDeletePixRequest = DeletePixKeyRequest(key.key)
+        val bcbDeletePixRequest = DeletePixKeyClientRequest(key.key)
         val bcbResponse = bcbClient.deletePixKey(key.key, bcbDeletePixRequest)
 
         if (!HttpStatus.OK.equals(bcbResponse.status)) {

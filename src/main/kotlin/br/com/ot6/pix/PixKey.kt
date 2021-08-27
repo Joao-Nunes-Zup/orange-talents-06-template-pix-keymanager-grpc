@@ -48,4 +48,10 @@ class PixKey(
     fun updateKey(key: String) {
         this.key = key
     }
+
+    override fun toString(): String {
+        return "PixKey(clientId=$clientId, type=$type, key='$key', accountType=$accountType, account=$account, id=$id, creationDate=$creationDate)"
+    }
+
+
 }

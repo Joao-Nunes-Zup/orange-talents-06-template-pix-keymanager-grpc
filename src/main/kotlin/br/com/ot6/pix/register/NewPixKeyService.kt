@@ -44,7 +44,7 @@ class NewPixKeyService(
         val bcbResponse = bcbClient.savePixKey(bcbPixKeyRequest)
 
         if (!HttpStatus.CREATED.equals(bcbResponse.status)) {
-            throw IllegalStateException("Erro ao criar chave no Banco Centreal do Brasil")
+            throw IllegalStateException("Erro ao criar chave no Banco Central do Brasil")
         }
 
         pixKey.updateKey(bcbResponse.body()!!.key)

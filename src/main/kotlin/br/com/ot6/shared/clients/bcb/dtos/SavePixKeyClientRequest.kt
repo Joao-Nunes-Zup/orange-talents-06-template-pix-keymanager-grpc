@@ -16,9 +16,9 @@ data class SavePixKeyRequest(
         fun from(pixKey: PixKey): SavePixKeyRequest {
             val accountType =
                 if (AccountType.CONTA_CORRENTE.equals(pixKey.accountType)) {
-                    AccountTypeRequest.CACC
+                    AccountTypeClientRequest.CACC
                 } else {
-                    AccountTypeRequest.SVGS
+                    AccountTypeClientRequest.SVGS
                 }
 
             return SavePixKeyRequest(
@@ -38,13 +38,41 @@ data class SavePixKeyRequest(
             )
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SavePixKeyRequest
+
+        if (keyType != other.keyType) return false
+        if (key != other.key) return false
+        if (bankAccount != other.bankAccount) return false
+        if (owner != other.owner) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = keyType.hashCode()
+        result = 31 * result + key.hashCode()
+        result = 31 * result + bankAccount.hashCode()
+        result = 31 * result + owner.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "SavePixKeyRequest(keyType=$keyType, key='$key', bankAccount=$bankAccount, owner=$owner)"
+    }
+
+
 }
 
 data class BankAccountRequest(
     val participant: String,
     val branch: String,
     val accountNumber: String,
-    val accountType: AccountTypeRequest
+    val accountType: AccountTypeClientRequest
 )
 
 data class OwnerRequest(

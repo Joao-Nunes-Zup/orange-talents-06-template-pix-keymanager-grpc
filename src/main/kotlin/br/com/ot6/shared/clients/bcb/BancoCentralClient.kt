@@ -25,8 +25,8 @@ interface BancoCentralClient {
     )
     fun deletePixKey(
         @PathVariable key: String,
-        @Body request: DeletePixKeyRequest
-    ): HttpResponse<DeletePixKeyReturn>
+        @Body request: DeletePixKeyClientRequest
+    ): HttpResponse<DeletePixKeyClientReturn>
 
     @Get(
         value = "/api/v1/pix/keys/{key}",
