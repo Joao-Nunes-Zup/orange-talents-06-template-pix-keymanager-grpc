@@ -56,7 +56,7 @@ internal class DetailKeyEndpointTest(
         )
     )
 
-    val pixKeyEmail = PixKey(
+    private val pixKeyEmail = PixKey(
         clientId = CLIENT_ID,
         type = PixKeyType.EMAIL,
         key = "fulano@detal.com",
@@ -70,7 +70,7 @@ internal class DetailKeyEndpointTest(
         )
     )
 
-    val pixKeyPhone = PixKey(
+    private val pixKeyPhone = PixKey(
         clientId = UUID.randomUUID(),
         type = PixKeyType.PHONE,
         key = "+5585988714077",
@@ -83,7 +83,6 @@ internal class DetailKeyEndpointTest(
             number = "11111"
         )
     )
-
 
     @BeforeEach
     fun setup() {
