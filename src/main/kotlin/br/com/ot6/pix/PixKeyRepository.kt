@@ -12,4 +12,6 @@ interface PixKeyRepository: CrudRepository<PixKey, UUID> {
     fun findByIdAndClientId(pixUuid: UUID?, clientUuid: UUID?): Optional<PixKey>
 
     fun findByKey(key: String): Optional<PixKey>
+
+    fun findAllByClientId(clientUUID: UUID?): Set<PixKey>
 }

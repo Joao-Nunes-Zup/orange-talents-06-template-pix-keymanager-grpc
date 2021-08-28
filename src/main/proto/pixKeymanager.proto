@@ -21,6 +21,10 @@ service PixKeymanagerDetailService {
   rpc detail(DetailPixKeyRequest) returns (DetailPixKeyResponse) {}
 }
 
+service PixKeymanagerListService {
+  rpc list(ListPixKeyRequest) returns (ListPixKeyResponse) {}
+}
+
 enum KeyType {
   UNKNOWN_KEY_TYPE = 0;
   CPF = 1;
@@ -91,4 +95,22 @@ message DetailPixKeyResponse {
   string clientId = 1;
   string pixId = 2;
   PixKey key = 3;
+}
+
+message ListPixKeyRequest {
+  string clientId = 1;
+}
+
+message ListPixKeyResponse {
+
+  message PixKey {
+    string pixId = 1;
+    KeyType type = 2;
+    string key = 3;
+    AccountType accountType = 4;
+    google.protobuf.Timestamp createdAt = 5;
+  }
+
+  string clientId = 1;
+  repeated PixKey keys = 2;
 }
